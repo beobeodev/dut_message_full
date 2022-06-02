@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:mobile/core/constants/asset_path.dart';
+import 'package:mobile/core/constants/font_family.dart';
+import 'package:mobile/core/theme/palette.dart';
+import 'package:mobile/modules/auth/controllers/login.controller.dart';
+import 'package:mobile/modules/auth/widgets/rounded_button.widget.dart';
+import 'package:mobile/widgets/rounded_text_form_field.widget.dart';
+
+class LoginScreen extends GetView<LoginController> {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: Container(
+            width: Get.width,
+            height: Get.height,
+            padding: EdgeInsets.only(
+                left: 25,
+                right: 25,
+                top: MediaQuery.of(context).padding.top + 10,
+                bottom: 20),
+            decoration: const BoxDecoration(color: Palette.white100),
+            child: Column(children: [
+              Image.asset(AssetPath.imageGroupChat),
+              SizedBox(
+                height: 20.h,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Đăng nhập',
+                  style: TextStyle(
+                    fontFamily: FontFamily.fontNunito,
+                    color: Palette.zodiacBlue,
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 60.h,
+              ),
+              RoundedTextFormField(
+                textController: controller.usernameController,
+                hintText: 'Tên đăng nhập',
+                suffixIconWidget: const Icon(
+                  Icons.mail,
+                  color: Palette.blue200,
+                ),
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              RoundedTextFormField(
+                textController: controller.passwordController,
+                hintText: 'Mật khẩu',
+                suffixIconWidget: GestureDetector(
+                  onTap: () {},
+                  child: const Icon(
+                    Icons.visibility_off,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30.h,
+              ),
+              RoundedButton(onPressed: () {}, content: 'Đăng nhập'),
+              const Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Chưa có tài khoản? ',
+                    style: TextStyle(
+                      color: Palette.zodiacBlue,
+                      fontFamily: FontFamily.fontNunito,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      'ĐĂNG KÝ',
+                      style: TextStyle(
+                        color: Palette.blue200,
+                        fontFamily: FontFamily.fontNunito,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+}
