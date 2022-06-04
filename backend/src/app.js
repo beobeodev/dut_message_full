@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const path = require('path');
 const logger = require('morgan');
+const db = require('./config/db/index');
+
+db.connect();
 
 dotenv.config({path: path.resolve(__dirname, './config/.env')});
 const app = express();
