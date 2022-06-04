@@ -4,25 +4,27 @@ import 'package:mobile/core/theme/palette.dart';
 
 class RoundedTextFormField extends StatelessWidget {
   final TextEditingController textController;
-  final String Function(String?)? validator;
+  final String? Function(String?)? validator;
   final bool obscureText;
   final String? hintText;
+  final String? errorText;
   final double borderRadius;
   final Color borderColor;
   final Widget? suffixIconWidget;
   final Widget? prefixIconWidget;
 
-  const RoundedTextFormField(
-      {Key? key,
-      required this.textController,
-      this.validator,
-      this.obscureText = false,
-      this.hintText,
-      this.borderRadius = 6,
-      this.borderColor = Palette.blue200,
-      this.suffixIconWidget,
-      this.prefixIconWidget})
-      : super(key: key);
+  const RoundedTextFormField({
+    Key? key,
+    required this.textController,
+    this.validator,
+    this.obscureText = false,
+    this.hintText,
+    this.errorText,
+    this.borderRadius = 6,
+    this.borderColor = Palette.blue200,
+    this.suffixIconWidget,
+    this.prefixIconWidget,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +68,10 @@ class RoundedTextFormField extends StatelessWidget {
         ),
         fillColor: Colors.white,
         filled: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 0),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14),
         suffixIcon: suffixIconWidget,
         prefixIcon: prefixIconWidget,
+        errorText: errorText == '' || errorText == null ? null : errorText,
       ),
     );
   }

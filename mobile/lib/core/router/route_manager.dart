@@ -10,10 +10,14 @@ abstract class RouteManager {
 
   static List<GetPage> pages = [
     GetPage(
-        name: splash,
-        page: () => const SplashScreen(),
-        binding: SplashBinding()),
+      name: splash,
+      page: () => const SplashScreen(),
+      binding: SplashBinding(),
+    ),
     GetPage(
-        name: login, page: () => const LoginScreen(), binding: LoginBinding())
+      name: login,
+      page: () => const LoginScreen(),
+      binding: LoginBinding(),
+    )
   ];
 }

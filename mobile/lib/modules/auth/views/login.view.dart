@@ -21,85 +21,104 @@ class LoginScreen extends GetView<LoginController> {
             width: Get.width,
             height: Get.height,
             padding: EdgeInsets.only(
-                left: 25,
-                right: 25,
-                top: MediaQuery.of(context).padding.top + 10,
-                bottom: 20),
+              left: 25,
+              right: 25,
+              top: MediaQuery.of(context).padding.top + 10,
+              bottom: 20,
+            ),
             decoration: const BoxDecoration(color: Palette.white100),
-            child: Column(children: [
-              Image.asset(AssetPath.imageGroupChat),
-              SizedBox(
-                height: 20.h,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Đăng nhập',
-                  style: TextStyle(
-                    fontFamily: FontFamily.fontNunito,
-                    color: Palette.zodiacBlue,
-                    fontSize: 28.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 60.h,
-              ),
-              RoundedTextFormField(
-                textController: controller.usernameController,
-                hintText: 'Tên đăng nhập',
-                suffixIconWidget: const Icon(
-                  Icons.mail,
-                  color: Palette.blue200,
-                ),
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              RoundedTextFormField(
-                textController: controller.passwordController,
-                hintText: 'Mật khẩu',
-                suffixIconWidget: GestureDetector(
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.visibility_off,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30.h,
-              ),
-              RoundedButton(onPressed: () {}, content: 'Đăng nhập'),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            child: Form(
+              key: controller.loginFormKey,
+              child: Column(
                 children: [
-                  Text(
-                    'Chưa có tài khoản? ',
-                    style: TextStyle(
-                      color: Palette.zodiacBlue,
-                      fontFamily: FontFamily.fontNunito,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16.sp,
-                    ),
+                  Image.asset(AssetPath.imageGroupChat),
+                  SizedBox(
+                    height: 20.h,
                   ),
-                  GestureDetector(
-                    onTap: () {},
+                  Align(
+                    alignment: Alignment.centerLeft,
                     child: Text(
-                      'ĐĂNG KÝ',
+                      'Đăng nhập',
                       style: TextStyle(
-                        color: Palette.blue200,
                         fontFamily: FontFamily.fontNunito,
+                        color: Palette.zodiacBlue,
+                        fontSize: 28.sp,
                         fontWeight: FontWeight.w700,
-                        fontSize: 16.sp,
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 60.h,
+                  ),
+                  RoundedTextFormField(
+                    textController: controller.usernameController,
+                    hintText: 'Tên đăng nhập',
+                    suffixIconWidget: const Icon(
+                      Icons.mail,
+                      color: Palette.blue200,
+                    ),
+                    validator: controller.validateUsername,
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Obx(
+                    () => RoundedTextFormField(
+                      textController: controller.passwordController,
+                      hintText: 'Mật khẩu',
+                      suffixIconWidget: GestureDetector(
+                        onTap: controller.onChangeShowPassword,
+                        child: Icon(
+                          controller.showPassword.value
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: controller.showPassword.value
+                              ? Palette.blue200
+                              : Colors.grey,
+                        ),
+                      ),
+                      validator: controller.validatePassword,
+                      obscureText: !controller.showPassword.value,
+                      errorText: controller.errorText.value,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  RoundedButton(
+                    onPressed: controller.onTapButtonLogin,
+                    content: 'Đăng nhập',
+                  ),
+                  const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Chưa có tài khoản? ',
+                        style: TextStyle(
+                          color: Palette.zodiacBlue,
+                          fontFamily: FontFamily.fontNunito,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Text(
+                          'ĐĂNG KÝ',
+                          style: TextStyle(
+                            color: Palette.blue200,
+                            fontFamily: FontFamily.fontNunito,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
-            ]),
+              ),
+            ),
           ),
         ),
       ),
