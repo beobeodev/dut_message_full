@@ -37,4 +37,52 @@ class HiveLocalDatasource implements IHiveLocalDatasource {
     await atBox.put(KeyHiveLocal.refreshToken, refreshToken);
     await atBox.put(KeyHiveLocal.currentUser, userData);
   }
+
+  // Token
+  Future<void> setAllToken(String accessToken, String refreshToken) async {
+    final Box atBox = await authBox;
+
+    await atBox.put(KeyHiveLocal.accessToken, accessToken);
+    await atBox.put(KeyHiveLocal.refreshToken, refreshToken);
+  }
+
+  Future<void> deleteAllToken() async {
+    final Box atBox = await authBox;
+
+    await atBox.delete(KeyHiveLocal.accessToken);
+    await atBox.delete(KeyHiveLocal.refreshToken);
+  }
+
+  Future<String?> getAccessToken() async {
+    final Box atBox = await authBox;
+    return atBox.get(KeyHiveLocal.accessToken);
+  }
+
+  Future<String> getRefreshToken() async {
+    final Box atBox = await authBox;
+    return atBox.get(KeyHiveLocal.refreshToken);
+  }
+
+  // User data
+  Future<void> setCurrentUserData(Map<String, dynamic> data) async {
+    final Box atBox = await authBox;
+    await atBox.put(KeyHiveLocal.currentUser, data);
+  }
+
+  Future<Map<dynamic, dynamic>> getCurrentUserData() async {
+    final Box atBox = await authBox;
+    return atBox.get(KeyHiveLocal.currentUser);
+  }
+
+  Future<void> deleteCurrentUserData() async {
+    final Box atBox = await authBox;
+    await atBox.delete(KeyHiveLocal.currentUser);
+  }
+
+  Future<void> removeAllData() async {
+    await deleteAllToken();
+    await deleteCurrentUserData();
+    // await authBox.clear();
+    // await authBox.deleteFromDisk();
+  }
 }
