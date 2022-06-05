@@ -5,7 +5,7 @@ class UserEntity {
   final String avatar;
   final String phone;
   final String email;
-  final List<String> friends;
+  final List<dynamic> friends;
 
   UserEntity({
     required this.id,
@@ -24,7 +24,7 @@ class UserEntity {
         email: json['email'] as String,
         avatar: json['avatar'] as String,
         phone: json['phone'] as String,
-        friends: json['friends'] as List<String>,
+        friends: json['friends'] as List<dynamic>,
       );
 
   Map<String, dynamic> toJson() => {

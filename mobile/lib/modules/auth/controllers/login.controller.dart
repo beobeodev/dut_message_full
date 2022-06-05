@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/core/router/route_manager.dart';
 import 'package:mobile/core/utils/http/exceptions.dart';
 import 'package:mobile/core/utils/http/request_state.dart';
 import 'package:mobile/domain/entities/user.entity.dart';
@@ -49,7 +50,7 @@ class LoginController extends GetxController {
     final RequestState<UserEntity> loginState =
         await loginUseCase.execute(params: formData);
     if (loginState is RequestSuccess) {
-      // Get.offAndToNamed(page)
+      Get.offAndToNamed(RouteManager.root);
     } else if (loginState is RequestFailed<UserEntity>) {
       handleError(loginState);
     }

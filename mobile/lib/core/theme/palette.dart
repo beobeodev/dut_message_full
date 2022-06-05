@@ -9,7 +9,7 @@ abstract class Palette {
   static const Color red200 = Color(0xFFFF4A4A);
 
   static const Color white100 = Color(0xFFF4F8FD);
-  static const Color white200 = Color(0xFFECF2FF);
+  static const Color white200 = Color(0xFFF5F5F5);
   static const Color white300 = Color(0xFFCDD0D4);
 
   // suport colors
