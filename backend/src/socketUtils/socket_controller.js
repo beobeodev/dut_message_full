@@ -114,6 +114,11 @@ class SocketController {
         io.to(data.roomId).emit(socketConsts.EVENT_RECEIVE_REMOVE_ROOM_MESSAGE, {roomId: data.roomId, messageId: data.messageId});
         
     }
+
+    async disconnectHandler(socket, io) {
+      console.log("Disconnect: " + socket.id)
+      this._socketRepo.removeUserBySocketId(socket.id);
+  }
 }
 
 module.exports = SocketController;

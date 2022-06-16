@@ -23,6 +23,7 @@ module.exports = async (socket, io) => {
   onLeaveRoom(socket, io);
   onRemoveConverMessage(socket, io);
   onRemoveRoomMessage(socket, io);
+  onDisconnect(socket, io);
 }
 
 function onConverMessage(socket, io) {
@@ -94,5 +95,11 @@ function onRemoveConverMessage(socket, io) {
 function onRemoveRoomMessage(socket, io) {
   socket.on(SocketConsts.EVENT_SEND_REMOVE_ROOM_MESSAGE, (data) => {
       socketController.removeRoomMesssageHandler(socket, io, data);
+  })
+}
+
+function onDisconnect(socket, io) {
+  socket.on(SocketConsts.ON_DISCONNECT, () => {
+      socketController.disconnectHandler(socket, io);
   })
 }
