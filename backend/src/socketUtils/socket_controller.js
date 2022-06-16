@@ -59,6 +59,17 @@ class SocketController {
       if(data.fromId == F_request.from){
           io.to(`${this._socketRepo.getSocketIdByUserId(data.toId)}`).emit(socketConsts.EVENT_REMOVE_FRIEND_REQUEST, F_request)
       }
+    }
+
+    async createRoomHandler(socket, io, data) {
+      if(data.nameRoom == undefined || data.nameRoom == "") {
+          data.nameRoom = "Nhóm của bạn và " + data.ids.length + " người khác";
+      }
+      const arrayId = [data.authorId].concat(data.ids)
+      const room = await this._messageService.createRoom(arrayId, data.nameAuthor, data.nameRoom);
+      arrayId.map((id) => {
+          io.to(`${this._socketRepo.getSocketIdByUserId(id)}`).emit(socketConsts.EVENT_RECEIVE_CREATE_ROOM, room);
+      })
   }
 }
 
