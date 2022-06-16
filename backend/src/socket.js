@@ -19,6 +19,7 @@ module.exports = async (socket, io) => {
   onDelFriend(socket, io);
   onCancelFriendRequest(socket, io);
   onCreateRoom(socket, io);
+  onJoinRoom(socket, io);
   onAddUserToRoom(socket, io);
   onLeaveRoom(socket, io);
   onRemoveConverMessage(socket, io);
