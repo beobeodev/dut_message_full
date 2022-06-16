@@ -92,6 +92,16 @@ class SocketController {
           io.to(`${this._socketRepo.getSocketIdByUserId(id)}`).emit(socketConsts.EVENT_RECEIVE_ADD_USER_TO_ROOM, room);
       })
     }
+
+    async leaveRoomHandler(socket, io, data) {
+      const message = await this._messageService.removeUserfromRoom(data.roomId, data.fromId);
+      let result = {
+          roomId: data.roomId,
+          message: message,
+      }
+      socket.leave(data.roomId);
+      io.to(data.roomId).emit(socketConsts.EVENT_RECEIVE_ROOM_MESSAGE, result);
+    }
 }
 
 module.exports = SocketController;

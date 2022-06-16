@@ -20,6 +20,7 @@ module.exports = async (socket, io) => {
   onCancelFriendRequest(socket, io);
   onCreateRoom(socket, io);
   onAddUserToRoom(socket, io);
+  onLeaveRoom(socket, io);
 }
 
 function onConverMessage(socket, io) {
@@ -73,5 +74,11 @@ function onJoinRoom(socket, io) {
 function onAddUserToRoom(socket, io) {
   socket.on(SocketConsts.EVENT_SEND_ADD_USER_TO_ROOM, (data) => {
       socketController.addUserToRoom(socket, io, data);
+  })
+}
+
+function onLeaveRoom(socket, io) {
+  socket.on(SocketConsts.EVENT_SEND_LEAVE_ROOM, (data) => {
+      socketController.leaveRoomHandler(socket, io, data);
   })
 }
