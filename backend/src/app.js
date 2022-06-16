@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const logger = require('morgan');
 const db = require('./config/db/index');
+const route = require('./routes/index');
 
 db.connect();
 
@@ -15,6 +16,8 @@ app.use(logger("dev"));
 app.use(express.static("public"))
 app.set("view engine", "ejs");
 app.set("views", "./views");
+
+route(app);
 
 
 
