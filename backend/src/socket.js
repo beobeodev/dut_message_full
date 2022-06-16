@@ -21,6 +21,8 @@ module.exports = async (socket, io) => {
   onCreateRoom(socket, io);
   onAddUserToRoom(socket, io);
   onLeaveRoom(socket, io);
+  onRemoveConverMessage(socket, io);
+  onRemoveRoomMessage(socket, io);
 }
 
 function onConverMessage(socket, io) {
@@ -80,5 +82,17 @@ function onAddUserToRoom(socket, io) {
 function onLeaveRoom(socket, io) {
   socket.on(SocketConsts.EVENT_SEND_LEAVE_ROOM, (data) => {
       socketController.leaveRoomHandler(socket, io, data);
+  })
+}
+
+function onRemoveConverMessage(socket, io) {
+  socket.on(SocketConsts.EVENT_SEND_REMOVE_CONVER_MESSAGE, (data) => {
+      socketController.removeConverMessageHandler(socket, io, data);
+  })
+}
+
+function onRemoveRoomMessage(socket, io) {
+  socket.on(SocketConsts.EVENT_SEND_REMOVE_ROOM_MESSAGE, (data) => {
+      socketController.removeRoomMesssageHandler(socket, io, data);
   })
 }
