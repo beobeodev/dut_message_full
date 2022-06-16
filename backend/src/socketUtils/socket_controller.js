@@ -46,6 +46,20 @@ class SocketController {
       io.to(`${this._socketRepo.getSocketIdByUserId(data.fromId)}`).emit(socketConsts.EVENT_NOTIFY_ACCEPT_FRIEND, {'infoFriend': F_request.to, 'conver': conver});
       io.to(`${this._socketRepo.getSocketIdByUserId(data.toId)}`).emit(socketConsts.EVENT_NOTIFY_ACCEPT_FRIEND, {'infoFriend': F_request.from, 'conver': conver});
     }
+
+    async removeFriendHandler(socket, io, data) {
+      await this._userService.removeFriend(data.fromId, data.toId);
+      io.to(`${this._socketRepo.getSocketIdByUserId(data.fromId)}`).emit(socketConsts.EVENT_RECEIVE_CANCEL_FRIEND, data.toId);
+      io.to(`${this._socketRepo.getSocketIdByUserId(data.toId)}`).emit(socketConsts.EVENT_RECEIVE_CANCEL_FRIEND, data.fromId);
+    }
+
+    async removeFriendRequest(socket, io, data) {
+      const F_request = await this._userService.getFriendRequestById(data.friend_request_id);
+      await this._userService.removeFriendRequest(data.friend_request_id);
+      if(data.fromId == F_request.from){
+          io.to(`${this._socketRepo.getSocketIdByUserId(data.toId)}`).emit(socketConsts.EVENT_REMOVE_FRIEND_REQUEST, F_request)
+      }
+  }
 }
 
 module.exports = SocketController;
