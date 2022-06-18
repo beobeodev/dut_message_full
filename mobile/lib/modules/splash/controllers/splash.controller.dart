@@ -1,22 +1,39 @@
-import 'package:get/get.dart';
 import 'package:mobile/core/router/route_manager.dart';
-import 'package:mobile/domain/repositories/ihive_local.repository.dart';
+import 'package:mobile/modules/base/controllers/auth.controller.dart';
+import 'package:get/get.dart';
 
 class SplashController extends GetxController {
-  final IHiveLocalRepository localRepository;
+  final AuthController authController;
 
-  SplashController({required this.localRepository});
+  SplashController({
+    required this.authController,
+  });
 
   @override
-  void onReady() async {
-    super.onReady();
-    await Future<void>.delayed(const Duration(milliseconds: 1500));
+  Future<void> onInit() async {
+    super.onInit();
+    await completeAnimation();
+  }
 
-    final String? accessToken = await localRepository.getAccessToken();
-    if (accessToken != null) {
-      Get.offAndToNamed(RouteManager.root);
+  Future<void> completeAnimation() async {
+    await Future<void>.delayed(const Duration(milliseconds: 1600));
+    if (authController.isNewUser == null || authController.isNewUser == false) {
+      Get.offAllNamed(RouteManager.onboard);
+    } else if (authController.currentUser != null) {
+      // await initData();
+      Get.offAllNamed(RouteManager.drawer);
     } else {
-      Get.offAndToNamed(RouteManager.login);
+      Get.offAllNamed(RouteManager.login);
     }
   }
+
+  // Future<void> initData() async {
+  //   try {
+  //     await localRepository.initData();
+  //     await conversationRepository.getListConversationAndRoom();
+  //     await userRepository.initData();
+  //   } catch (e) {
+  //     print('Error in initData() from SplashController: $e');
+  //   }
+  // }
 }

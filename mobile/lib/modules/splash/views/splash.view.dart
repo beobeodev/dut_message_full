@@ -1,26 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:mobile/modules/splash/controllers/splash.controller.dart';
+import 'package:mobile/core/constants/font_family.dart';
+import 'package:mobile/core/constants/asset_path.dart';
 import 'package:mobile/core/theme/palette.dart';
-import 'package:mobile/modules/splash/widgets/logo_app.dart';
+import 'package:mobile/modules/splash/widgets/dut_message_logo.widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends GetView<SplashController> {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Palette.white200, Colors.white],
+            colors: [
+              Palette.gray200,
+              Colors.white,
+            ],
           ),
         ),
-        width: Get.width,
-        height: Get.height,
-        child: const Center(
-          child: LogoApp(),
+        width: size.width,
+        height: size.height,
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top + ScreenUtil().setHeight(20),
+        ),
+        child: Stack(
+          children: [
+            Align(
+              child: Column(
+                children: [
+                  DecoratedBox(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          AssetPath.dutLogo,
+                        ),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    child: SizedBox(
+                      width: ScreenUtil().setWidth(60),
+                      height: ScreenUtil().setWidth(60),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(20),
+                  ),
+                  Text(
+                    'Trường Đại học Bách Khoa\nĐại học Đà Nẵng',
+                    style: TextStyle(
+                      color: Palette.metallicViolet,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: FontFamily.fontNunito,
+                      fontSize: ScreenUtil().setSp(24),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            const DUTMessageLogo(),
+          ],
         ),
       ),
     );

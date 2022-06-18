@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/core/constants/asset_path.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mobile/core/constants/asset_path.dart';
 
-class LogoApp extends StatefulWidget {
-  const LogoApp({Key? key}) : super(key: key);
+class DUTMessageLogo extends StatefulWidget {
+  const DUTMessageLogo({Key? key}) : super(key: key);
 
   @override
-  State<LogoApp> createState() => _LogoAppState();
+  State<DUTMessageLogo> createState() => _DUTMessageLogoState();
 }
 
-class _LogoAppState extends State<LogoApp> with TickerProviderStateMixin {
+class _DUTMessageLogoState extends State<DUTMessageLogo>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -54,7 +55,7 @@ class _LogoAppState extends State<LogoApp> with TickerProviderStateMixin {
           width: ScreenUtil().setWidth(220),
           height: ScreenUtil().setWidth(210),
           child: SvgPicture.asset(
-            AssetPath.imageLogo,
+            AssetPath.appLogo,
             fit: BoxFit.cover,
           ),
         ),
