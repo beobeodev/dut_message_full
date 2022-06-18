@@ -1,68 +1,100 @@
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:mobile/data/datasources/local/hive_local.datasource.dart';
-import 'package:mobile/domain/repositories/ihive_local.repository.dart';
+import 'package:mobile/core/constants/key_hive.dart';
+import 'package:mobile/data/models/user.model.dart';
+import 'package:hive/hive.dart';
 
-class HiveLocalRepository implements IHiveLocalRepository {
-  final HiveLocalDatasource datasource;
+class HiveLocalRepository {
+  Box? _authBox;
 
-  HiveLocalRepository({required this.datasource});
-
-  @override
   Future<Box> openAuthBox() async {
-    return await datasource.openAuthBox();
+    return await Hive.openBox(KeyHive.authBox);
   }
 
-  @override
-  Future<void> setAllDataToAuthBox(
+  Future<Box> get authBox async {
+    if (_authBox != null) {
+      return _authBox!;
+    }
+    _authBox = await openAuthBox();
+    return _authBox!;
+  }
+
+  Future<void> setAllNewUserData(
     String accessToken,
     String refreshToken,
     Map<String, dynamic> userData,
   ) async {
-    return await datasource.setAllDataToAuthBox(
-      accessToken,
-      refreshToken,
-      userData,
-    );
+    final Box atBox = await authBox;
+    await atBox.put(KeyHive.accessToken, accessToken);
+    await atBox.put(KeyHive.refreshToken, refreshToken);
+    await atBox.put(KeyHive.currentUser, userData);
   }
 
-  @override
+  //
   Future<void> setAllToken(String accessToken, String refreshToken) async {
-    return await datasource.setAllToken(accessToken, refreshToken);
+    final Box atBox = await authBox;
+
+    await atBox.put(KeyHive.accessToken, accessToken);
+    await atBox.put(KeyHive.refreshToken, refreshToken);
+    // print(refreshToken);
   }
 
-  @override
   Future<void> deleteAllToken() async {
-    return await datasource.deleteAllToken();
+    final Box atBox = await authBox;
+
+    await atBox.delete(KeyHive.accessToken);
+    await atBox.delete(KeyHive.refreshToken);
   }
 
-  @override
   Future<String?> getAccessToken() async {
-    return await datasource.getAccessToken();
+    final Box atBox = await authBox;
+
+    return atBox.get(KeyHive.accessToken);
   }
 
-  @override
-  Future<String> getRefreshToken() async {
-    return await datasource.getRefreshToken();
+  Future<String?> getRefreshToken() async {
+    final Box atBox = await authBox;
+
+    return atBox.get(KeyHive.refreshToken);
   }
 
-  // User data
-  @override
-  Future<void> setCurrentUserData(Map<String, dynamic> data) async {
-    return await datasource.setCurrentUserData(data);
+  Future<void> setNewUser() async {
+    final Box atBox = await authBox;
+
+    await atBox.put('new_user', true);
   }
 
-  @override
-  Future<Map> getCurrentUserData() async {
-    return await datasource.getCurrentUserData();
+  Future<bool?> getNewUser() async {
+    final Box atBox = await authBox;
+
+    return atBox.get('new_user');
   }
 
-  @override
-  Future<void> deleteCurrentUserData() async {
-    return await datasource.deleteCurrentUserData();
+  Future<void> setCurrentUser(Map<String, dynamic> data) async {
+    final Box atBox = await authBox;
+
+    await atBox.put(KeyHive.currentUser, data);
   }
 
-  @override
+  Future<UserModel?> getCurrentUser() async {
+    final Box atBox = await authBox;
+
+    if (atBox.get(KeyHive.currentUser) != null) {
+      final Map<String, dynamic> userData =
+          Map<String, dynamic>.from(atBox.get(KeyHive.currentUser));
+      return UserModel.fromJson(userData);
+    }
+    return null;
+  }
+
+  Future<void> deleteCurrentUser() async {
+    final Box atBox = await authBox;
+
+    await atBox.delete(KeyHive.currentUser);
+  }
+
   Future<void> removeAllData() async {
-    return await datasource.removeAllData();
+    await deleteAllToken();
+    await deleteCurrentUser();
+    // await authBox.clear();
+    // await authBox.deleteFromDisk();
   }
 }

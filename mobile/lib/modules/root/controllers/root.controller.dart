@@ -1,59 +1,120 @@
-import 'package:flutter/material.dart';
+import 'dart:developer';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mobile/core/router/route_manager.dart';
+import 'package:mobile/data/models/user.model.dart';
+import 'package:mobile/data/repositories/hive_local.repository.dart';
+import 'package:mobile/modules/base/controllers/auth.controller.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:mobile/core/constants/custom_enum.dart';
-import 'package:mobile/domain/entities/drawer_menu_item.entity.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class RootController extends GetxController {
-  //Check whether drawer is open or not
-  final RxBool _isDrawerOpen = false.obs;
-  bool get isDrawerOpen => _isDrawerOpen.value;
+  final HiveLocalRepository localRepository = HiveLocalRepository();
+  // final SocketController socketController = Get.put(SocketController());
 
-  final RxDouble _xOffset = 0.0.obs;
-  final RxDouble _yOffset = 0.0.obs;
-  final RxDouble _scaleFactor = 1.0.obs;
+  final AuthController authController;
 
-  double get xOffset => _xOffset.value;
-  double get yOffset => _yOffset.value;
-  double get scaleFactor => _scaleFactor.value;
+  RootController({required this.authController});
 
-  // default screen is home screen
-  final Rx<CurrentScreen> currentSreen = CurrentScreen.home.obs;
+  final RxBool isDrawerOpen = false.obs;
+  final RxDouble xOffset = 0.0.obs;
+  final RxDouble yOffset = 0.0.obs;
+  final RxDouble scaleFactor = 1.0.obs;
+
+  final RxInt currentIndexPage = 0.obs;
+
+  late UserModel currentUser;
 
   //This list to store title and icon of menu item
-  final List<DrawerMenuItemEntity> menuItems = [
-    DrawerMenuItemEntity(
-      title: 'Tin nhắn',
-      icon: Icons.chat,
-      screen: CurrentScreen.home,
-    ),
-    DrawerMenuItemEntity(
-      title: 'Bạn bè',
-      icon: Icons.people_alt,
-      screen: CurrentScreen.friend,
-    ),
-    DrawerMenuItemEntity(
-      title: 'Hồ sơ',
-      icon: Icons.assignment_ind,
-      screen: CurrentScreen.profile,
-    )
+  final List<Map<String, dynamic>> listMenuItem = [
+    <String, dynamic>{
+      'title': 'Nhắn tin',
+      'icon': FontAwesomeIcons.commentAlt,
+    },
+    <String, dynamic>{'title': 'Bạn bè', 'icon': FontAwesomeIcons.userFriends},
+    <String, dynamic>{
+      'title': 'Hồ sơ',
+      'icon': FontAwesomeIcons.idBadge,
+    },
   ];
 
+  late io.Socket socket;
+
+  @override
+  void onInit() {
+    super.onInit();
+    currentUser = authController.currentUser!;
+    setUpSocket();
+  }
+
+  void setUpSocket() {
+    try {
+      socket = io.io(
+        dotenv.env['SOCKET_URL'],
+        io.OptionBuilder()
+            .setTransports(['websocket']) // for Flutter or Dart VM
+            // .enableAutoConnect()
+            // .enableReconnection()// enable auto-connection
+            .setQuery({'userId': authController.currentUser!.id}).build(),
+      );
+      if (socket.disconnected) {
+        socket.connect();
+      }
+      socket.onConnect((_) {
+        log('HAS CONNECTED to socket');
+      });
+    } catch (e) {
+      log('Error in setUpSocket from RootController: ${e.toString()}');
+      rethrow;
+    }
+  }
+
+  //This function to implement close drawer
   void closeDrawer() {
-    _xOffset.value = 0.0;
-    _yOffset.value = 0.0;
-    _scaleFactor.value = 1;
-    _isDrawerOpen.value = false;
+    xOffset.value = 0.0;
+    yOffset.value = 0.0;
+    scaleFactor.value = 1;
+    isDrawerOpen.value = false;
   }
 
+  //This function to implement open drawer
   void openDrawer() {
-    _xOffset.value = Get.width / 2 + 30;
-    _yOffset.value = 150;
-    _scaleFactor.value = 0.6;
-    _isDrawerOpen.value = true;
+    xOffset.value = 250;
+    yOffset.value = 150;
+    scaleFactor.value = 0.6;
+    isDrawerOpen.value = true;
   }
 
-  void onTapMenuItem(int menuItemIndex) {
-    currentSreen.value = menuItems[menuItemIndex].screen;
-    // closeDrawer();
+  void onTapMenuItem(int newIndex) {
+    currentIndexPage.value = newIndex;
+    closeDrawer();
   }
+
+  //This function to handle event onTap of logout button
+  Future<void> onTapLogoutButton() async {
+    await localRepository.removeAllData();
+    Get.offAllNamed(RouteManager.login);
+  }
+
+  // Future<void> onPressFacebookButton() async {
+  //   String fbProtocolUrl;
+  //   if (Platform.isIOS) {
+  //     fbProtocolUrl = 'fb://profile/145408438926727';
+  //   } else {
+  //     fbProtocolUrl = 'fb://page/145408438926727';
+  //   }
+
+  //   const String fallbackUrl = 'https://www.facebook.com/bachkhoaDUT';
+
+  //   try {
+  //     final bool launched = await launch(fbProtocolUrl, forceSafariVC: false);
+
+  //     if (!launched) {
+  //       await launch(fallbackUrl, forceSafariVC: false);
+  //     }
+  //   } catch (e) {
+  //     await launch(fallbackUrl, forceSafariVC: false);
+  //   }
+  // }
 }

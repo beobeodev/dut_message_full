@@ -1,80 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mobile/core/constants/font_family.dart';
+import 'package:mobile/core/constants/enums/request_status.enum.dart';
 import 'package:mobile/core/theme/palette.dart';
+import 'package:mobile/data/models/conversation.model.dart';
+import 'package:mobile/modules/home/controllers/home.controller.dart';
+import 'package:mobile/modules/home/widgets/conversation_item.widget.dart';
+import 'package:get/get.dart';
 
-class ListConversation extends StatelessWidget {
+class ListConversation extends GetView<HomeController> {
   const ListConversation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: 10,
-      padding: EdgeInsets.zero,
-      separatorBuilder: (context, index) {
-        return const SizedBox(
-          height: 8,
+    return Positioned(
+      top: Get.height * 0.15,
+      width: Get.width,
+      height: 0.85 * Get.height,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: Palette.gray200,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(60.0),
+          ),
+        ),
+        child: Obx(() {
+          return _buildGetConversations();
+        }),
+      ),
+    );
+  }
+
+  Widget _buildGetConversations() {
+    switch (controller.getConversationsStatus) {
+      case RequestStatus.loading:
+        return const Center(
+          child: CircularProgressIndicator(),
         );
-      },
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {},
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            height: 70.h,
+      case RequestStatus.hasData:
+        return Obx(
+          () => ListView.builder(
+            itemCount: controller.conversations.length,
             padding: const EdgeInsets.only(
-              left: 15,
-              top: 5,
-              bottom: 5,
+              left: 20,
+              right: 20,
+              top: 30,
             ),
-            child: Row(
-              children: [
-                const CircleAvatar(
-                  radius: 25,
-                  backgroundColor: Colors.red,
-                ),
-                const SizedBox(
-                  width: 18,
-                ),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Conversation',
-                        style: TextStyle(
-                          color: Palette.zodiacBlue,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: FontFamily.fontNunito,
-                          fontSize: 17.sp,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Tin nhắn',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: FontFamily.fontNunito,
-                          fontSize: ScreenUtil().setSp(15),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
+            itemBuilder: (context, index) {
+              final ConversationModel currentConversation =
+                  controller.conversations[index];
+              if (currentConversation.messages.isNotEmpty) {
+                return ConversationItem(
+                  currentConversation: currentConversation,
+                  onTap: () {
+                    controller.onTapConversationItem(currentConversation.id);
+                  },
+                );
+              } else {
+                return const SizedBox();
+              }
+            },
           ),
         );
-      },
-    );
+      case RequestStatus.hasError:
+        return const Center(
+          child: Text('Lỗi không thể lấy dữ liệu'),
+        );
+      default:
+        return const SizedBox();
+    }
   }
 }

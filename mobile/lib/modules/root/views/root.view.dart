@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:mobile/modules/base/controllers/auth.controller.dart';
 import 'package:mobile/modules/root/controllers/root.controller.dart';
-import 'package:mobile/modules/root/widgets/adaptive_page.widget.dart';
+import 'package:mobile/modules/root/widgets/build_page.widget.dart';
 import 'package:mobile/modules/root/widgets/drawer_side.widget.dart';
+import 'package:get/get.dart';
 
-class RootScreen extends GetView<RootController> {
-  const RootScreen({Key? key}) : super(key: key);
+class RootScreen extends StatelessWidget {
+  final RootController rootController =
+      Get.put(RootController(authController: Get.find<AuthController>()));
+
+  RootScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,7 @@ class RootScreen extends GetView<RootController> {
         child: Stack(
           children: const [
             DrawerSide(),
-            AdaptivePage(),
+            BuildPage(),
           ],
         ),
       ),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:mobile/core/constants/font_family.dart';
 import 'package:mobile/core/theme/palette.dart';
 import 'package:mobile/modules/root/controllers/root.controller.dart';
 import 'package:mobile/modules/root/widgets/drawer_menu_item.widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class DrawerSide extends GetView<RootController> {
   const DrawerSide({Key? key}) : super(key: key);
@@ -25,17 +25,19 @@ class DrawerSide extends GetView<RootController> {
             children: [
               const CircleAvatar(
                 radius: 30,
-                backgroundColor: Colors.red,
+                backgroundImage: NetworkImage(
+                  'https://www.2checkout.com/docs/en/client_persons/Frank_Kong.png',
+                ),
               ),
               const SizedBox(
                 width: 15,
               ),
               Text(
-                'Minh Đức',
+                controller.currentUser.name,
                 style: TextStyle(
                   fontFamily: FontFamily.fontNunito,
                   color: Palette.zodiacBlue,
-                  fontSize: 20.sp,
+                  fontSize: ScreenUtil().setSp(20),
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -43,22 +45,22 @@ class DrawerSide extends GetView<RootController> {
           ),
           SizedBox(
             width: ScreenUtil().setWidth(150),
-            child: ListView.separated(
+            child: ListView.builder(
               shrinkWrap: true,
-              itemCount: 3,
-              separatorBuilder: (context, index) {
-                return SizedBox(
-                  height: 20.h,
-                );
-              },
+              itemCount: controller.listMenuItem.length,
               itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    controller.onTapMenuItem(index);
-                  },
-                  child: DrawerMenuItem(
-                    title: controller.menuItems[index].title,
-                    icon: controller.menuItems[index].icon,
+                return Padding(
+                  padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(20)),
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.onTapMenuItem(
+                        index,
+                      );
+                    },
+                    child: DrawerMenuItem(
+                      title: controller.listMenuItem[index]['title'] as String,
+                      icon: controller.listMenuItem[index]['icon'] as IconData,
+                    ),
                   ),
                 );
               },
@@ -101,7 +103,7 @@ class DrawerSide extends GetView<RootController> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: controller.onTapLogoutButton,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

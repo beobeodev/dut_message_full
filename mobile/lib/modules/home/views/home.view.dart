@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/modules/home/controllers/home.controller.dart';
 import 'package:mobile/core/theme/palette.dart';
 import 'package:mobile/modules/home/widgets/header_home.widget.dart';
 import 'package:mobile/modules/home/widgets/list_conversation.widget.dart';
+import 'package:get/get.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends GetView<HomeController> {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: 20,
-          right: 20,
-          top: MediaQuery.of(context).padding.top + 10,
-        ),
-        child: Column(
-          children: const [
-            HeaderHome(),
-            SizedBox(
-              height: 20,
+      body: Stack(
+        children: [
+          const HeaderHome(),
+          Positioned(
+            top: size.height * 0.14,
+            right: 0,
+            width: 0.3 * size.width,
+            height: 0.2 * size.height,
+            child: const ColoredBox(
+              color: Palette.blue200,
             ),
-            Expanded(child: ListConversation())
-          ],
-        ),
+          ),
+          const ListConversation(),
+        ],
       ),
-      backgroundColor: Palette.white200,
+      backgroundColor: Palette.gray200,
     );
   }
 }

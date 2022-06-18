@@ -1,14 +1,46 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:mobile/app.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:mobile/core/router/route_manager.dart';
+import 'package:mobile/generated/locales.g.dart';
 import 'package:mobile/injector.dart';
+import 'package:mobile/modules/base/bindings/base.binding.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await dotenv.load();
-
   initDependencies();
+  await FlutterDownloader.initialize();
   runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'DUT Message',
+          getPages: RouteManager.pages,
+          initialRoute: RouteManager.splash,
+          initialBinding: BaseBinding(),
+          translationsKeys: AppTranslation.translations,
+          fallbackLocale: const Locale('vi', 'VN'),
+          locale: Get.deviceLocale,
+        );
+      },
+    );
+  }
 }
