@@ -47,14 +47,18 @@ class HomeController extends GetxController {
   Future<void> getAllConversations() async {
     try {
       _getConversationsStatus.value = RequestStatus.loading;
+
       conversations.value = await conversationRepository.getAllConversations();
+
       _getConversationsStatus.value = RequestStatus.hasData;
     } on DioError catch (dioError) {
       _getConversationsStatus.value = RequestStatus.hasError;
+
       log('Error in getAllConversations() from HomeController ${dioError.response.toString()}');
       rethrow;
     } catch (e) {
       _getConversationsStatus.value = RequestStatus.hasError;
+
       log('Error in getAllConversations() from HomeController: ${e.toString()}');
       rethrow;
     }
@@ -144,7 +148,7 @@ class HomeController extends GetxController {
             .firstWhere((element) => element.id == data['converId']);
         final MessageModel messageTemp = conversationTemp.messages
             .firstWhere((element) => element.id == data['messageId']);
-        messageTemp.isDeleted = true;
+        messageTemp.deleted = true;
 
         final List<ConversationModel> listTemp = List.from(conversations);
         listTemp.removeWhere((element) => element.id == data['converId']);
@@ -168,7 +172,7 @@ class HomeController extends GetxController {
           (element) => element.id == data['messageId'],
         );
 
-        messageTemp.isDeleted = true;
+        messageTemp.deleted = true;
         final List<ConversationModel> listTemp = List.from(
           conversations,
         );
