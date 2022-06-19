@@ -1,5 +1,5 @@
-import 'package:mobile/data/repositories/firebase_repository.dart';
-import 'package:mobile/data/repositories/user_repository.dart';
+import 'package:mobile/data/repositories/file_repository.dart';
+import 'package:mobile/data/repositories/user.repository.dart';
 import 'package:mobile/injector.dart';
 import 'package:mobile/modules/base/controllers/auth.controller.dart';
 import 'package:mobile/modules/profile/controllers/profile.controller.dart';
@@ -14,7 +14,7 @@ class ProfileBinding implements Bindings {
         authController: Get.find<AuthController>(),
         rootController: Get.find<RootController>(),
         userRepository: getIt.get<UserRepository>(),
-        firebaseRepository: getIt.get<FirebaseRepository>(),
+        firebaseRepository: getIt.get<FileRepository>(),
       ),
     );
   }
