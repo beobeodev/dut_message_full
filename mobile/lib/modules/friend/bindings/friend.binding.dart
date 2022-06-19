@@ -1,4 +1,4 @@
-import 'package:mobile/data/repositories/user_repository.dart';
+import 'package:mobile/data/repositories/user.repository.dart';
 import 'package:mobile/injector.dart';
 import 'package:mobile/modules/base/controllers/auth.controller.dart';
 import 'package:mobile/modules/friend/controllers/friend.controller.dart';
