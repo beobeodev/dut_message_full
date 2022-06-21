@@ -4,7 +4,7 @@ import 'package:mobile/core/utils/extensions/date_time_format.extension.dart';
 import 'package:mobile/data/models/message.model.dart';
 import 'package:mobile/modules/chat/controllers/chat.controller.dart';
 import 'package:mobile/core/constants/font_family.dart';
-import 'package:mobile/modules/chat/widgets/chat/chat_item/chat_item_content.dart';
+import 'package:mobile/modules/chat/widgets/chat/chat_item/chat_item_content.widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
