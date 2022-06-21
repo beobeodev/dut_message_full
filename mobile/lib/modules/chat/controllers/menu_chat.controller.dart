@@ -8,7 +8,7 @@ import 'package:mobile/data/models/user.model.dart';
 import 'package:mobile/data/repositories/user.repository.dart';
 import 'package:mobile/modules/base/controllers/auth.controller.dart';
 import 'package:mobile/modules/chat/controllers/chat.controller.dart';
-import 'package:mobile/modules/chat/widgets/menu_chat/create_room_conversation_sheet.widget.dart';
+import 'package:mobile/modules/chat/widgets/menu_chat/create_room_sheet.widget.dart';
 import 'package:mobile/modules/friend/controllers/friend.controller.dart';
 import 'package:mobile/modules/root/controllers/root.controller.dart';
 import 'package:mobile/widgets/rounded_alert_dialog.widget.dart';
