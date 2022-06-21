@@ -8,7 +8,7 @@ import 'package:mobile/core/constants/socket_event.dart';
 import 'package:mobile/core/widgets/hero_popup_route.dart';
 import 'package:mobile/data/models/conversation.model.dart';
 import 'package:mobile/modules/base/controllers/auth.controller.dart';
-import 'package:mobile/modules/friend/widgets/popup/popup_profile_friend.dart';
+import 'package:mobile/modules/friend/widgets/popup/popup_profile_friend.widget.dart';
 import 'package:mobile/modules/home/controllers/home.controller.dart';
 import 'package:mobile/core/constants/enums/add_friend_status.enum.dart';
 import 'package:mobile/core/router/route_manager.dart';
