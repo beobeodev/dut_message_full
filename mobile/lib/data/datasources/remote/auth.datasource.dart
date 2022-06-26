@@ -6,7 +6,8 @@ class AuthRemoteDataSource {
   }
 
   Future<HttpRequestResponse> forgotPassword(
-      Map<String, dynamic> formBody) async {
+    Map<String, dynamic> formBody,
+  ) async {
     return await DioProvider.post(
       url: '/user/forgot-password',
       formBody: formBody,
